@@ -108,12 +108,32 @@
             "text_alignment_mobile": "left",
             "color_scheme": "scheme-4"
           }
+        },
+        "slide_mGy6zE": {
+          "type": "slide",
+          "name": "Slide-4",
+          "settings": {
+            "image": "shopify://shop_images/Slide_-_3.jpg",
+            "image_overlay_opacity": 0,
+            "heading": "<strong>MORE THAN JUST SHOES — IT’S A PART OF YOUR STORY. 4444</strong>",
+            "heading_size": "h0",
+            "subheading": "Original sneakers from Nike and other top brands that make every step feel special.",
+            "button_label": "Shop the Collection",
+            "link": "#",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-left",
+            "text_alignment": "left",
+            "text_alignment_mobile": "left",
+            "color_scheme": "scheme-4"
+          }
         }
       },
       "block_order": [
         "slide_xTLGCx",
         "slide_Khg64f",
-        "slide_kyh3U8"
+        "slide_kyh3U8",
+        "slide_mGy6zE"
       ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
