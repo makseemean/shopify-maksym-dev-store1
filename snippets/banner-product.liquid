@@ -4,13 +4,13 @@
             <div class="product__gallery">
                 <div class="product__gallery-thumbs">
                     <swiper-container class="product__gallery-thumbs-slider" init="false">
-                        <swiper-slide><img src="" alt=""></swiper-slide>
+                        <swiper-slide><img src="https://d2opxh93rbxzdn.cloudfront.net/original/2X/4/40cfa8ca1f24ac29cfebcb1460b5cafb213b6105.png" alt=""></swiper-slide>   <swiper-slide><img src="https://d2opxh93rbxzdn.cloudfront.net/original/2X/4/40cfa8ca1f24ac29cfebcb1460b5cafb213b6105.png" alt=""></swiper-slide>   <swiper-slide><img src="https://d2opxh93rbxzdn.cloudfront.net/original/2X/4/40cfa8ca1f24ac29cfebcb1460b5cafb213b6105.png" alt=""></swiper-slide>
                     </swiper-container>
                 </div>
                 <div class="product__gallery-main">
                     <swiper-container class="product__gallery-main-slider"
                                       thumbs-swiper=".product__gallery-thumbs-slider" init="false">
-                        <swiper-slide><img src="" alt=""></swiper-slide>
+                        <swiper-slide><img src="https://d2opxh93rbxzdn.cloudfront.net/original/2X/4/40cfa8ca1f24ac29cfebcb1460b5cafb213b6105.png" alt=""></swiper-slide>   <swiper-slide><img src="https://d2opxh93rbxzdn.cloudfront.net/original/2X/4/40cfa8ca1f24ac29cfebcb1460b5cafb213b6105.png" alt=""></swiper-slide>   <swiper-slide><img src="https://d2opxh93rbxzdn.cloudfront.net/original/2X/4/40cfa8ca1f24ac29cfebcb1460b5cafb213b6105.png" alt=""></swiper-slide>
                     </swiper-container>
                 </div>
             </div>
@@ -47,4 +47,49 @@
                 </div>
             </div>
         </div>
+
+        <script>
+
+            const thumbsSlider = document.querySelector('.product__gallery-thumbs-slider'),
+                mainSlider = document.querySelector('.product__gallery-main-slider');
+
+            const thumbsParams = {
+                direction: 'vertical',
+                slidesPerView: 5,
+                spaceBetween: 10,
+                freeMode: true,
+                watchSlidesProgress: true,
+                allowTouchMove: true,
+                watchOverflow: true,
+                breakpoints: {
+                    0: {
+                        direction: 'horizontal',
+                        slidesPerView: 'auto',
+                        spaceBetween: 10,
+                    },
+                    769: {
+                        direction: 'vertical',
+                        slidesPerView: 5,
+                        spaceBetween: 10,
+                    }
+                },
+                injectStyles: [
+                    `  .swiper-wrapper {
+               justify-content: space-between;
+            }
+         `
+                ],
+            };
+
+            const mainParams = {
+                spaceBetween: 10,
+                slidesPerView: 1,
+            };
+
+            Object.assign(thumbsSlider, thumbsParams);
+            Object.assign(mainSlider, mainParams);
+
+            thumbsSlider.initialize();
+            mainSlider.initialize();
+        </script>
 </section>
