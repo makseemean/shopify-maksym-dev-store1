@@ -254,10 +254,10 @@
         </button>
       {%- endif -%}
     </div>
-
-    {% render 'banner-product', handle: 'example-shirt' %}
   {%- endif -%}
 </slideshow-component>
+
+{% render 'banner-product', product: all_products['example-shirt'] %}
 
 {%- if request.design_mode -%}
   <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
