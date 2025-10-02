@@ -1,0 +1,380 @@
+{% assign current_product = product %}
+{% if current_product == blank and handle %}
+    {% assign current_product = all_products[handle] %}
+{% endif %}
+
+{% if current_product == blank %}
+    <div class="product-error">
+        {{ 'product.banner.not_found' | t }}
+    </div>
+{% else %}
+
+    <script>
+        const productData = {{ current_product | json }};
+    </script>
+
+    <section class="product section" data-product-id="{{ current_product.id }}">
+        <div class="container">
+            <div class="product__inner">
+
+                <div class="product__gallery">
+                    {% if current_product.images.size > 0 %}
+                        <div class="product__gallery-thumbs">
+                            <swiper-container class="product__gallery-thumbs-slider" init="false">
+                                {% for image in current_product.images %}
+                                    <swiper-slide>
+                                        <img
+                                                src="{{ image.src | img_url: '400x' }}"
+                                                alt="{{ image.alt | default: current_product.title | default: 'Product image' }}"
+                                                loading="lazy"
+                                        >
+                                    </swiper-slide>
+                                {% endfor %}
+                            </swiper-container>
+                        </div>
+
+                        <div class="product__gallery-main">
+                            <swiper-container
+                                    class="product__gallery-main-slider"
+                                    thumbs-swiper=".product__gallery-thumbs-slider"
+                                    init="false"
+                            >
+                                {% for image in current_product.images %}
+                                    <swiper-slide>
+                                        <img
+                                                src="{{ image.src | img_url: '800x' }}"
+                                                alt="{{ image.alt | default: current_product.title | default: 'Product image' }}"
+                                                loading="lazy"
+                                        >
+                                    </swiper-slide>
+                                {% endfor %}
+                            </swiper-container>
+                        </div>
+                    {% else %}
+                        <div class="product__gallery-placeholder">
+                            {{ 'product.banner.no_images' | t }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="product__info">
+                    <div class="product__top">
+                        <h3 class="product__title title title_h2">
+                            {{ current_product.title }}
+                        </h3>
+
+                        {% if current_product.price %}
+                            <div class="product__price">
+                                {% if current_product.compare_at_price > current_product.price %}
+                                    <span class="product__price-compare">{{ current_product.compare_at_price | money }}</span>
+                                    <span class="product__price-current product__price-current--sale">{{ current_product.price | money }}</span>
+                                {% elsif current_product.price_varies %}
+                                    <span class="product__price-current">{{ current_product.price_min | money }} – {{ current_product.price_max | money }}</span>
+                                {% else %}
+                                    <span class="product__price-current">{{ current_product.price | money }}</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        <div class="product__available" data-product-availability>
+                            {% if current_product.available %}
+                                {{ 'product.banner.available' | t }}
+                            {% else %}
+                                {{ 'product.banner.not_available' | t }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% assign color_option_index = nil %}
+                    {% for option in current_product.options_with_values %}
+                        {% assign option_name_downcase = option.name | downcase %}
+                        {% if option_name_downcase contains 'color' or option_name_downcase contains 'колір' %}
+                            {% assign color_option_index = forloop.index %}
+                            {% break %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if color_option_index %}
+                        {% assign color_option_position = 'option' | append: color_option_index %}
+                        {% assign unique_colors = current_product.variants | map: color_option_position | uniq %}
+
+                        <div class="product__variants">
+                            <div class="product__variants-label">
+                                {{ 'product.banner.select_color' | t }}
+                                <span data-selected-color></span>
+                            </div>
+                            <div class="product__variants-items">
+                                {% for color in unique_colors limit: 3 %}
+                                    {% assign color_variant = nil %}
+                                    {% for variant in current_product.variants %}
+                                        {% if variant[color_option_position] == color %}
+                                            {% assign color_variant = variant %}
+                                            {% break %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if color_variant %}
+                                        <button
+                                                class="product__variants-item{% if forloop.first %} active{% endif %}"
+                                                data-color="{{ color | escape }}"
+                                                data-option-position="{{ color_option_index }}"
+                                                data-available="{{ color_variant.available }}"
+                                                data-inventory="{{ color_variant.inventory_quantity | default: 0 }}"
+                                        >
+                                            {{ color }}
+                                        </button>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="product__stock-info" data-stock-info>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="product__variants-notice">
+                            {{ 'product.banner.no_colors' | t }}
+                        </div>
+                    {% endif %}
+
+                    {% assign size_option_index = nil %}
+                    {% for option in current_product.options_with_values %}
+                        {% assign option_name_downcase = option.name | downcase %}
+                        {% if option_name_downcase contains 'size' or option_name_downcase contains 'розмір' %}
+                            {% assign size_option_index = forloop.index %}
+                            {% break %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if size_option_index %}
+                        {% assign size_option_position = 'option' | append: size_option_index %}
+                        {% assign unique_sizes = current_product.variants | map: size_option_position | uniq %}
+
+                        <div class="product__options">
+                            <div class="product__options-text">
+                                {{ 'product.banner.select_size' | t }}
+                                <span data-selected-size></span>
+                            </div>
+                            <div class="product__options-items">
+                                {% for size in unique_sizes %}
+                                    <button
+                                            class="product__options-item{% if forloop.first %} active{% endif %}"
+                                            data-size="{{ size | escape }}"
+                                            data-option-position="{{ size_option_index }}"
+                                    >
+                                        {{ size }}
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" action="/cart/add" class="product__form">
+                        <input type="hidden" name="id" data-variant-id
+                               value="{{ current_product.selected_or_first_available_variant.id }}">
+                        <input type="hidden" name="quantity" value="1">
+
+                        <button
+                                type="submit"
+                                class="product__btn btn btn_black"
+                                {% unless current_product.available %}disabled{% endunless %}
+                        >
+                            <span>{{ 'product.banner.add_to_cart' | t }}</span>
+                        </button>
+                    </form>
+
+                    {% if current_product.description != blank %}
+                        <div class="product__descr">
+                            {{ current_product.description }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                const productSection = document.querySelector('[data-product-id="{{ current_product.id }}"]');
+                if (!productSection) return;
+
+                const colorButtons = productSection.querySelectorAll('.product__variants-item');
+                const sizeButtons = productSection.querySelectorAll('.product__options-item');
+                const stockInfo = productSection.querySelector('[data-stock-info]');
+                const availabilityDiv = productSection.querySelector('[data-product-availability]');
+                const variantIdInput = productSection.querySelector('[data-variant-id]');
+                const addToCartBtn = productSection.querySelector('.product__btn');
+                const selectedColorSpan = productSection.querySelector('[data-selected-color]');
+                const selectedSizeSpan = productSection.querySelector('[data-selected-size]');
+
+                let selectedColor = null;
+                let selectedSize = null;
+
+                if (colorButtons.length > 0) {
+                    selectedColor = colorButtons[0].dataset.color;
+                    if (selectedColorSpan) selectedColorSpan.textContent = selectedColor;
+                    updateStockInfo(colorButtons[0]);
+                }
+                if (sizeButtons.length > 0) {
+                    selectedSize = sizeButtons[0].dataset.size;
+                    if (selectedSizeSpan) selectedSizeSpan.textContent = selectedSize;
+                }
+
+                function updateStockInfo(colorButton) {
+                    if (!stockInfo || !colorButton) return;
+
+                    const available = colorButton.dataset.available === 'true';
+                    const inventory = parseInt(colorButton.dataset.inventory) || 0;
+
+                    if (!available || inventory === 0) {
+                        stockInfo.innerHTML = '<span class="product__stock-info--unavailable">' +
+                            ('{{ "product.banner.not_available" | t }}') +
+                            '</span>';
+                    } else if (inventory > 0) {
+                        stockInfo.innerHTML = '<span class="product__stock-info--available">' +
+                            ('{{ "product.banner.available_with_count" | t }}') +
+                            ': ' + inventory + ' {{ "product.banner.units" | t }}' +
+                            '</span>';
+                    } else {
+                        stockInfo.innerHTML = '<span class="product__stock-info--available">' +
+                            ('{{ "product.banner.available" | t }}') +
+                            '</span>';
+                    }
+                }
+
+                function findVariant() {
+                    if (!productData || !productData.variants) return null;
+
+                    return productData.variants.find(variant => {
+                        let matches = true;
+
+                        if (selectedColor && variant.option{{ color_option_index }} !== selectedColor) {
+                            matches = false;
+                        }
+                        if (selectedSize && variant.option{{ size_option_index }} !== selectedSize) {
+                            matches = false;
+                        }
+
+                        return matches;
+                    });
+                }
+
+                function updateVariantUI(variant) {
+                    if (!variant) return;
+
+                    if (variantIdInput) {
+                        variantIdInput.value = variant.id;
+                    }
+
+                    if (addToCartBtn) {
+                        if (variant.available) {
+                            addToCartBtn.disabled = false;
+                            addToCartBtn.classList.remove('disabled');
+                        } else {
+                            addToCartBtn.disabled = true;
+                            addToCartBtn.classList.add('disabled');
+                        }
+                    }
+
+                    if (availabilityDiv) {
+                        if (variant.available) {
+                            availabilityDiv.textContent = '{{ "product.banner.available" | t }}';
+                            availabilityDiv.classList.remove('unavailable');
+                        } else {
+                            availabilityDiv.textContent = '{{ "product.banner.not_available" | t }}';
+                            availabilityDiv.classList.add('unavailable');
+                        }
+                    }
+                }
+
+                colorButtons.forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.preventDefault();
+
+                        colorButtons.forEach(btn => btn.classList.remove('product__variants-item_active'));
+
+                        this.classList.add('product__variants-item_active');
+
+                        selectedColor = this.dataset.color;
+                        if (selectedColorSpan) selectedColorSpan.textContent = selectedColor;
+
+                        updateStockInfo(this);
+
+                        const variant = findVariant();
+                        if (variant) {
+                            updateVariantUI(variant);
+                        }
+                    });
+                });
+
+                sizeButtons.forEach(button => {
+                    button.addEventListener('click', function (e) {
+                        e.preventDefault();
+
+                        sizeButtons.forEach(btn => btn.classList.remove('product__options-item_active'));
+
+                        this.classList.add('product__options-item_active');
+
+                        selectedSize = this.dataset.size;
+                        if (selectedSizeSpan) selectedSizeSpan.textContent = selectedSize;
+
+                        const variant = findVariant();
+                        if (variant) {
+                            updateVariantUI(variant);
+                        }
+                    });
+                });
+
+                const initialVariant = findVariant();
+                if (initialVariant) {
+                    updateVariantUI(initialVariant);
+                }
+            })();
+        </script>
+
+        {% if current_product.images.size > 0 %}
+            <script>
+                const thumbsSlider = document.querySelector('.product__gallery-thumbs-slider'),
+                    mainSlider = document.querySelector('.product__gallery-main-slider');
+
+                if (thumbsSlider && mainSlider) {
+                    const thumbsParams = {
+                        direction: 'vertical',
+                        slidesPerView: 5,
+                        spaceBetween: 10,
+                        freeMode: true,
+                        watchSlidesProgress: true,
+                        allowTouchMove: true,
+                        watchOverflow: true,
+                        breakpoints: {
+                            0: {
+                                direction: 'horizontal',
+                                slidesPerView: 'auto',
+                                spaceBetween: 10,
+                            },
+                            769: {
+                                direction: 'vertical',
+                                slidesPerView: 5,
+                                spaceBetween: 10,
+                            }
+                        },
+                        injectStyles: [
+                            `.swiper-wrapper {
+              justify-content: space-between;
+            }`
+                        ],
+                    };
+
+                    const mainParams = {
+                        spaceBetween: 10,
+                        slidesPerView: 1,
+                    };
+
+                    Object.assign(thumbsSlider, thumbsParams);
+                    Object.assign(mainSlider, mainParams);
+
+                    thumbsSlider.initialize();
+                    mainSlider.initialize();
+                }
+            </script>
+        {% endif %}
+    </section>
+
+{% endif %}

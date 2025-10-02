@@ -536,5 +536,25 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+  },
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content"
+    }
+  },
+  "product": {
+    "banner": {
+      "not_found": "Product not found",
+      "no_images": "No images available",
+      "available": "In stock",
+      "not_available": "Out of stock",
+      "available_with_count": "In stock",
+      "units": "pcs.",
+      "select_color": "Select color:",
+      "select_size": "Select size:",
+      "no_colors": "Color option not available",
+      "no_sizes": "Size option not available",
+      "add_to_cart": "Add to cart"
+    }
   }
 }
