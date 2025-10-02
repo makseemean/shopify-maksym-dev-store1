@@ -60,7 +60,7 @@ button {
     height: 536px !important;
 }
 
-.product__gallery-thumbs-slider .swiper-slide {
+.product__gallery-thumbs-slider swiper-slide {
     width: 88px !important;
     height: 88px !important;
     border-radius: var(--border-radius);
@@ -69,14 +69,14 @@ button {
     opacity: .6;
 }
 
-.product__gallery-thumbs-slider .swiper-slide img {
+.product__gallery-thumbs-slider swiper-slide img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.product__gallery-thumbs-slider .swiper-slide.swiper-slide-thumb-active {
+.product__gallery-thumbs-slider swiper-slide.swiper-slide-thumb-active {
     opacity: 1;
 }
 
