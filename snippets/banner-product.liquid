@@ -288,9 +288,9 @@
                     button.addEventListener('click', function (e) {
                         e.preventDefault();
 
-                        colorButtons.forEach(btn => btn.classList.remove('active'));
+                        colorButtons.forEach(btn => btn.classList.remove('product__variants-item_active'));
 
-                        this.classList.add('active');
+                        this.classList.add('product__variants-item_active');
 
                         selectedColor = this.dataset.color;
                         if (selectedColorSpan) selectedColorSpan.textContent = selectedColor;
@@ -308,9 +308,9 @@
                     button.addEventListener('click', function (e) {
                         e.preventDefault();
 
-                        sizeButtons.forEach(btn => btn.classList.remove('active'));
+                        sizeButtons.forEach(btn => btn.classList.remove('product__options-item_active'));
 
-                        this.classList.add('active');
+                        this.classList.add('product__options-item_active');
 
                         selectedSize = this.dataset.size;
                         if (selectedSizeSpan) selectedSizeSpan.textContent = selectedSize;
